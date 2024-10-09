@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "cnn-tutorial"
+version = "0.3.0"
+description = ""
+authors = ["Stefan Suwelack <stefan.suwelack@renumics.com>"]
+license = "Apache 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+av = "12.2"
+renumics-spotlight = "1.6.11"
+tensorflow = "*"
+matplotlib = "*"
+scipy = "*"
+umap-learn = "*"
+jupyterlab = "*"
+k3d = "*"
+datasets = "*"
+torch = "*"
+librosa = "*"
+asammdf = "*"
+duckdb = "*"
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+isort = "*"
+pytest = "*"
+ruff = "*"
+taskipy = "*"
+pip-audit = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
+
+[tool.ruff]
+line-length = 140
+select = ["E", "F", "I", "N", "W", "B", "C", "D"]
+ignore = ["D100", "D104", "D107"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.taskipy.tasks]
+init = { cmd = "poetry install", help = "Install dependencies using Poetry" }
+format = { cmd = "black . && isort .", help = "Format code using Black and isort" }
+lint = { cmd = "ruff check .", help = "Lint code using Ruff" }
+audit-dependencies = { cmd = "pip-audit", help = "Audit dependencies using pip audit" }
+test = { cmd = "pytest", help = "Run tests using pytest" }
+check = { cmd = "task lint  && task test && task audit-dependencies", help = "Run all checks" }
+check-no-test = { cmd = "task lint  && task audit-dependencies", help = "Run all checks without running tests" }
