@@ -1,26 +1,24 @@
-from typing import Optional, Union, Dict, List, Any
+from typing import Union
+
 from renumics.spotlight import layout
 from renumics.spotlight.layout import (
     Layout,
-    Tab,
     Split,
-    lenses,
-    table,
-    similaritymap,
+    Tab,
+    confusion_matrix,
     inspector,
+    issues,
+    lenses,
+    metric,
+    scatterplot,
     split,
     tab,
-    metric,
-    issues,
-    confusion_matrix,
-    histogram,
-    scatterplot
+    table,
 )
-from renumics.spotlight.dtypes import create_dtype, is_audio_dtype, is_image_dtype
 
 
 def debug_image_classification(
-    image: str='image',
+    image: str = "image",
     label: str = "label",
     prediction: str = "prediction",
     emb_x: str = "emb_x",
@@ -37,30 +35,24 @@ def debug_image_classification(
 
     Returns:
         The configured layout for `spotlight.show`.
-    """
 
+    """
     # first column: table + issues
     metrics = tab(
         metric(name="Accuracy", metric="accuracy", columns=[label, prediction]),
         weight=15,
     )
-    column1 = split(
-        [metrics, tab(table(), weight=65)], weight=80, orientation="horizontal"
-    )
-    column1 = split(
-        [column1, tab(issues(), weight=40)], weight=80, orientation="horizontal"
-    )
+    column1 = split([metrics, tab(table(), weight=65)], weight=80, orientation="horizontal")
+    column1 = split([column1, tab(issues(), weight=40)], weight=80, orientation="horizontal")
 
     column2_list = []
     column2_list.append(
         tab(
-            confusion_matrix(
-                name="Confusion matrix", x_column=label, y_column=prediction
-            ),
+            confusion_matrix(name="Confusion matrix", x_column=label, y_column=prediction),
             weight=40,
         )
     )
-   
+
     row3 = tab(
         scatterplot(name="Embedding", x_column=emb_x, y_column=emb_y, color_by_column=label),
         weight=40,
@@ -70,21 +62,16 @@ def debug_image_classification(
     column2: Union[Tab, Split]
 
     column2 = split(column2_list, orientation="horizontal")
-    
 
     # fourth column: inspector
     inspector_fields = []
-   
-    
-       
-    inspector_fields.append(lenses.image('image'))
-   
+
+    inspector_fields.append(lenses.image("image"))
 
     inspector_fields.append(lenses.scalar(label))
     inspector_fields.append(lenses.scalar(prediction))
 
     inspector_view = inspector("Inspector", lenses=inspector_fields, num_columns=4)
-
 
     # build everything together
     column2.weight = 40
@@ -96,8 +83,6 @@ def debug_image_classification(
     the_layout = layout.layout(nodes)
 
     return the_layout
-
-
 
 
 def compare_image_classification(
@@ -125,8 +110,8 @@ def compare_image_classification(
 
     Returns:
         The configured layout for `spotlight.show`.
-    """
 
+    """
     # first column: table + issues
     metrics = split(
         [
@@ -148,12 +133,8 @@ def compare_image_classification(
         orientation="vertical",
         weight=15,
     )
-    column1 = split(
-        [metrics, tab(table(), weight=65)], weight=80, orientation="horizontal"
-    )
-    column1 = split(
-        [column1, tab(issues(), weight=40)], weight=80, orientation="horizontal"
-    )
+    column1 = split([metrics, tab(table(), weight=65)], weight=80, orientation="horizontal")
+    column1 = split([column1, tab(issues(), weight=40)], weight=80, orientation="horizontal")
 
     column2_list = []
     column2_list.append(
@@ -173,7 +154,7 @@ def compare_image_classification(
     )
 
     # third column: similarity maps
-   
+
     row2 = tab(
         confusion_matrix(
             name="Model1 vs. Model2 - binned scatterplot",
@@ -184,10 +165,19 @@ def compare_image_classification(
     )
     column2_list.append(row2)
 
-    
     row3 = tab(
-        scatterplot(name="Model 1 embedding", x_column=model1_emb_x, y_column=model1_emb_y, color_by_column=label),
-        scatterplot(name="Model 2 embedding", x_column=model2_emb_x, y_column=model2_emb_y, color_by_column=label),
+        scatterplot(
+            name="Model 1 embedding",
+            x_column=model1_emb_x,
+            y_column=model1_emb_y,
+            color_by_column=label,
+        ),
+        scatterplot(
+            name="Model 2 embedding",
+            x_column=model2_emb_x,
+            y_column=model2_emb_y,
+            color_by_column=label,
+        ),
         weight=40,
     )
 
@@ -196,15 +186,11 @@ def compare_image_classification(
     column2: Union[Tab, Split]
 
     column2 = split(column2_list, orientation="horizontal")
-  
 
     # fourth column: inspector
     inspector_fields = []
-   
-    
-       
-    inspector_fields.append(lenses.image('image'))
-   
+
+    inspector_fields.append(lenses.image("image"))
 
     inspector_fields.append(lenses.scalar(label))
     inspector_fields.append(lenses.scalar(model1_prediction))

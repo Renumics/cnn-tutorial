@@ -1,0 +1,13 @@
+av==12.2
+renumics-spotlight==1.6.11
+tensorflow
+matplotlib
+scipy
+umap-learn
+jupyterlab
+k3d
+datasets
+torch
+librosa
+asammdf
+duckdb
