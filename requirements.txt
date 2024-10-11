@@ -11,3 +11,4 @@ torch
 librosa
 asammdf
 duckdb
+plotly
