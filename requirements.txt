@@ -1,13 +1,14 @@
 av==12.2
 renumics-spotlight==1.6.11
+datasets==2.21.0
+numpy==1.24
 tensorflow
 matplotlib
 scipy
 umap-learn
 jupyterlab
 k3d
-datasets
-torch
+torch==2.4.1
 librosa
 asammdf
 duckdb
